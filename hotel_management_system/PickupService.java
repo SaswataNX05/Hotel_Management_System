@@ -152,10 +152,10 @@ public class PickupService extends JFrame implements ActionListener{
             String dura = duration.getText();
             
             if(drvid == null || carid == null) JOptionPane.showMessageDialog(null, "No Driver or Car available");
-            else if(location.equals("")) JOptionPane.showMessageDialog(null, "Pick-Up Location can't be empty");
-            else if(destination.equals("")) JOptionPane.showMessageDialog(null, "Destination can't be empty");
-            else if(rentt.equals("")) JOptionPane.showMessageDialog(null, "Car Rent can't be empty");
-            else if(dura.equals("")) JOptionPane.showMessageDialog(null, "The Trip must have a duration");
+            else if(location.isEmpty()) JOptionPane.showMessageDialog(null, "Pick-Up Location can't be empty");
+            else if(destination.isEmpty()) JOptionPane.showMessageDialog(null, "Destination can't be empty");
+            else if(rentt.isEmpty()) JOptionPane.showMessageDialog(null, "Car Rent can't be empty");
+            else if(dura.isEmpty()) JOptionPane.showMessageDialog(null, "The Trip must have a duration");
             else{
                 Payment p = new Payment();
                 String rt = p.Payment(rentt);
@@ -165,7 +165,7 @@ public class PickupService extends JFrame implements ActionListener{
                         float dur = Float.parseFloat(dura);
                         c.s.executeUpdate("insert into pickup_service values('"+drvid+"', '"+carid+"', '"+location+"', '"+destination+"', '"+rentt+"', '"+dur+"');");
                         c.s.executeUpdate("update cars set availability = 'Engaged' where car_id = '"+carid+"';");
-                        c.s.executeUpdate("create event realese_"+carid+" on schedule at CURRENT_TIMESTAMP + INTERVAL "+dur+" minute on completion not preserve do update cars set availability = 'Available' where car_id = '"+carid+"';");
+                        c.s.executeUpdate("create event release_"+carid+" on schedule at CURRENT_TIMESTAMP + INTERVAL "+dur+" minute on completion not preserve do update cars set availability = 'Available' where car_id = '"+carid+"';");
                         JOptionPane.showMessageDialog(null, "Pick-Up Service Booked Successfully...!");
                         setVisible(false);
                     }catch(Exception e){
