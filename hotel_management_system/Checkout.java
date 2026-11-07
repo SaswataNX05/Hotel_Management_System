@@ -15,10 +15,10 @@ public class Checkout extends JFrame implements ActionListener{
     Checkout(){
         
         ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/checkout.jpg"));
-        Image i2 = i1.getImage().getScaledInstance(520, 400, Image.SCALE_DEFAULT);
+        Image i2 = i1.getImage().getScaledInstance(520, 450, Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
         JLabel image = new JLabel(i3);
-        image.setBounds(450, 30, 520, 400);
+        image.setBounds(450, 30, 520, 450);
         add(image);       
         
         JLabel t1 = new JLabel("Check Out");
@@ -42,60 +42,80 @@ public class Checkout extends JFrame implements ActionListener{
         }catch(Exception e){
             System.out.println(e);
         }
-        
+
         ch.setBounds(210, 85, 150, 30);
         ch.setFont(new Font("Arial", Font.PLAIN, 14));
         ch.setBackground(Color.white);
-        add(ch);  
+        add(ch);
+
+        JLabel name = new JLabel("Name: ");
+        name.setBounds(30, 145, 150, 30);
+        name.setFont(new Font("Raleway", Font.BOLD, 20));
+        add(name);
+
+        JLabel namespace = new JLabel("");
+        try{
+            Conn c = new Conn();
+            ResultSet rs = c.s.executeQuery("select * from customer;");
+            while(rs.next()){
+                namespace.setText(rs.getString("name"));
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        namespace.setBounds(210, 145, 220, 30);
+        namespace.setFont(new Font("Raleway", Font.PLAIN, 15));
+        add(namespace);
         
         JLabel room = new JLabel("Room No  :");
-        room.setBounds(30, 145, 150, 30);
+        room.setBounds(30, 205, 150, 30);
         room.setFont(new Font("Raleway", Font.BOLD, 20));
         add(room);
         
         roomno = new JLabel("");
-        roomno.setBounds(210, 145, 150, 30);
+        roomno.setBounds(210, 205, 150, 30);
         roomno.setFont(new Font("Raleway", Font.PLAIN, 15));
         add(roomno);
         
         JLabel chein = new JLabel("Check IN Time :");
-        chein.setBounds(30, 205, 170, 30);
+        chein.setBounds(30, 265, 170, 30);
         chein.setFont(new Font("Raleway", Font.BOLD, 20));
         add(chein);
         
         checkin = new JLabel("");
-        checkin.setBounds(210, 205, 220, 30);
+        checkin.setBounds(210, 265, 220, 30);
         checkin.setFont(new Font("Raleway", Font.PLAIN, 15));
         add(checkin);
               
         JLabel Chk = new JLabel("Check Out Time :");
-        Chk.setBounds(30, 265, 170, 30);
+        Chk.setBounds(30, 325, 170, 30);
         Chk.setFont(new Font("Raleway", Font.BOLD, 20));
         add(Chk);
         
         Date dd = new Date();
         JLabel chkout = new JLabel("" + dd);
-        chkout.setBounds(210, 265, 220, 30);
+        chkout.setBounds(210, 325, 220, 30);
         chkout.setFont(new Font("Raleway", Font.PLAIN, 15));
         add(chkout);
         
         JLabel pay = new JLabel("Deposited  :");
-        pay.setBounds(30, 325, 150, 30);
+        pay.setBounds(30, 385, 150, 30);
         pay.setFont(new Font("Raleway", Font.BOLD, 20));
         add(pay);
         
         deposite = new JLabel("");
-        deposite.setBounds(210, 325, 150, 30);
+        deposite.setBounds(210, 385, 150, 30);
         deposite.setFont(new Font("Raleway", Font.PLAIN, 15));
         add(deposite);
         
         JLabel payt = new JLabel("Remaining  :");
-        payt.setBounds(30, 385, 150, 30);
+        payt.setBounds(30, 445, 150, 30);
         payt.setFont(new Font("Raleway", Font.BOLD, 20));
         add(payt);
         
         payment = new JLabel("");
-        payment.setBounds(210, 385, 150, 30);
+        payment.setBounds(210, 445, 150, 30);
         payment.setFont(new Font("Raleway", Font.PLAIN, 15));
         add(payment);
         
@@ -107,7 +127,7 @@ public class Checkout extends JFrame implements ActionListener{
         loadCustomerDetails();
         
         payrent = new JButton("Pay");
-        payrent.setBounds(50, 450, 120, 30);
+        payrent.setBounds(50, 510, 120, 30);
         payrent.setBackground(Color.black);
         payrent.setForeground(Color.white);
         payrent.setFont(new Font("Arial", Font.BOLD, 15));
@@ -115,7 +135,7 @@ public class Checkout extends JFrame implements ActionListener{
         add(payrent);
         
         checkout = new JButton("Check Out");
-        checkout.setBounds(260, 450, 150, 30);
+        checkout.setBounds(260, 510, 150, 30);
         checkout.setBackground(Color.black);
         checkout.setForeground(Color.white);
         checkout.setFont(new Font("Arial", Font.BOLD, 15));
@@ -123,7 +143,7 @@ public class Checkout extends JFrame implements ActionListener{
         add(checkout);
         
         back = new JButton("Back");
-        back.setBounds(750, 450, 120, 30);
+        back.setBounds(750, 510, 120, 30);
         back.setBackground(Color.black);
         back.setForeground(Color.white);
         back.setFont(new Font("Arial", Font.BOLD, 15));
@@ -131,7 +151,7 @@ public class Checkout extends JFrame implements ActionListener{
         add(back);
         
         setTitle("Check Out");
-        setBounds(500, 200, 1000, 550);
+        setBounds(500, 200, 1000, 600);
         getContentPane().setBackground(Color.WHITE);
         setLayout(null);
     }
@@ -203,8 +223,12 @@ public class Checkout extends JFrame implements ActionListener{
             }
             
         }else if(ae.getSource() == payrent){
-            payment.setText("0");
-            p = "0";
+            Payment pp = new Payment();
+            String rt = pp.Payment(p);
+            if("true".equals(rt)){
+                payment.setText("0");
+                p = "0";
+            }
         }
     }
     

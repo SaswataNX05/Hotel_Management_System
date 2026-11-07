@@ -211,27 +211,32 @@ public class CustomerForm extends JFrame implements ActionListener{
             if(male.isSelected()) gender = "Male";
             else if(female.isSelected()) gender =  "Female";
             
-            if(name.equals("")) JOptionPane.showMessageDialog(null, "Name can't be empty");
-            else if(idnumber.equals("")) JOptionPane.showMessageDialog(null, "ID Number can't be empty");
+            if(name.isEmpty()) JOptionPane.showMessageDialog(null, "Name can't be empty");
+            else if(idnumber.isEmpty()) JOptionPane.showMessageDialog(null, "ID Number can't be empty");
             else if(gender == null) JOptionPane.showMessageDialog(null, "Please select Gender");
-            else if(country.equals("")) JOptionPane.showMessageDialog(null, "Country can't be empty");
-            else if(religion.equals("")) JOptionPane.showMessageDialog(null, "Religion can't be empty");
+            else if(country.isEmpty()) JOptionPane.showMessageDialog(null, "Country can't be empty");
+            else if(religion.isEmpty()) JOptionPane.showMessageDialog(null, "Religion can't be empty");
             else if(roomno == null || roomno.isEmpty()) JOptionPane.showMessageDialog(null, "No Available Room Selected!");
-            else if(deposite.equals("")) JOptionPane.showMessageDialog(null, "Deposite section can't be empty");
-            else if(phno.equals("")) JOptionPane.showMessageDialog(null, "Phone No can't be empty");
+            else if(deposite.isEmpty()) JOptionPane.showMessageDialog(null, "Deposite section can't be empty");
+            else if(phno.isEmpty()) JOptionPane.showMessageDialog(null, "Phone No can't be empty");
             else{
-              try{
-                Conn c = new Conn();
-                Random rn = new Random();
-                long no = Math.abs((rn.nextLong() % 9000L) + 1000L);
-                String cusid = "Cus" + no;
-                c.s.executeUpdate("insert into customer values('"+name+"', '"+id+"', '"+idnumber+"', '"+gender+"', '"+country+"', '"+religion+"', '"+roomno+"', '"+datee+"', '"+deposite+"', '"+phno+"', '"+cusid+"');");
-                c.s.executeUpdate("update room set availability = 'Occupied' where room_number = '"+roomno+"';");
-                JOptionPane.showMessageDialog(null, "Room Booked Successfully..!\n Your Id is "+cusid+"");
-                setVisible(false);
-                }catch (Exception e){
-                    System.out.println(e);
+                Payment p = new Payment();
+                String res = p.Payment(deposite);
+                if ("true".equals(res)){
+                    try{
+                        Conn c = new Conn();
+                        Random rn = new Random();
+                        long no = Math.abs((rn.nextLong() % 9000L) + 1000L);
+                        String cusid = "Cus" + no;
+                        c.s.executeUpdate("insert into customer values('"+name+"', '"+id+"', '"+idnumber+"', '"+gender+"', '"+country+"', '"+religion+"', '"+roomno+"', '"+datee+"', '"+deposite+"', '"+phno+"', '"+cusid+"');");
+                        c.s.executeUpdate("update room set availability = 'Occupied' where room_number = '"+roomno+"';");
+                        JOptionPane.showMessageDialog(null, "Room Booked Successfully..!\n Your Id is "+cusid+"");
+                        setVisible(false);
+                    }catch (Exception e){
+                        System.out.println(e);
+                    }
                 }
+
             }
         }
     }
